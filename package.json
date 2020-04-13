@@ -1,0 +1,20 @@
+{
+  "name": "nodeserver",
+  "version": "1.0.0",
+  "description": "nodejs server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JunXunL/nodeServer.git"
+  },
+  "author": "Irene",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JunXunL/nodeServer/issues"
+  },
+  "homepage": "https://github.com/JunXunL/nodeServer#readme"
+}
