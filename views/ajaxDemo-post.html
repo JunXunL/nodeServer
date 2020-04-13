@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+    <title>AjaxDemo</title>
+  </head>
+  <style type="text/css">
+  h2, h3{text-align: center;}
+  #btnGroup{text-align: center;}
+  #showAnswer{text-align: center; border: 1px solid #000;}
+  </style>
+  <body>
+    <h2>漂洋过海来看你</h2>
+    <h3>辛苦遭逢起一景，身世浮沉</h3>
+    <h3>人生</h3>
+    <h3>丹心</h3>
+    <h3>
+      <input type="text" name="answer1" id="answer1"/>
+      <input type="text" name="answer2" id="answer2"/>
+    </h3>
+    <div id="btnGroup">
+      <button onclick="putAnswer()">提交答案</button>&nbsp;&nbsp;
+      <button onclick="searchAnswer()">查询答案</button>
+    </div>
+    <div id="showAnswer"></div>
+    <script type="text/javascript">
+      var xmlhttp;
+      // 创建XMLHttpRequest对象
+      if(window.XMLHttpRequest){
+        xmlhttp = new XMLHttpRequest();
+      }else if(window.ActiveXObject){
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      // 自定义提交答案到服务器后台的方法
+      function putAnswer(){
+        var answer1 = document.getElementById("answer1").value;
+        var answer2 = document.getElementById("answer2").value;
+        // 当readyState状态一改变就调用此事件方法
+        xmlhttp.onreadystatechange = function(){
+          // 当通信成功时
+          if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+            // 返回响应文本数据
+            var result = xmlhttp.responseText;
+            alert("你的答案是：" + result);
+          }
+        };
+        xmlhttp.open("POST", "http://localhost:3000/checkAnswer", true); // 与nodeserver服务器端的路由一致
+        xmlhttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+        xmlhttp.send("answer1=" + answer1 + "&answer2=" + answer2);
+      }
+      function searchAnswer(){
+        xmlhttp.onreadystatechange = function(){
+          if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+            var result = xmlhttp.responseText;
+            // 全局json.parse()把文本转换为json对象
+            var obj = JSON.parse(result);
+            // 获取DOM节点插入内容
+            document.getElementById('showAnswer').innerHTML = obj.answer1 + ',' + obj.answer2 + '。';
+          }
+        };
+        xmlhttp.open("GET", "http://localhost:3000/lookAnswer", true);
+        xmlhttp.send();
+      }
+    </script>
+  </body>
+</html>
