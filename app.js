@@ -14,7 +14,8 @@ var app = express();
 // 4、所以在views文件夹下新建一个error.html，成功解决了此问题
 // view engine setup
 // 这两种方式都可以：1.
-app.set('views', path.join(__dirname, './views'));
+app.set('views', path.join(__dirname, 'views'));
+// app.set('views', path.join(__dirname, './views'));
 // app.set('view engine', 'ejs'); // 注释这行，让模板可以识别html文件
 // 添加下面两行代码
 app.engine('.html', require('ejs').renderFile);
