@@ -22,8 +22,8 @@
   ### 7） 再在终端执行： get-ExecutionPolicy   ，显示RemoteSigned（修改成功）
 ## 8、再cd 进入该目录，输入命令：npm install 安装组件
 ## 9、最后执行命令：npm start 启动项目，http://localhost:3000/
-## 10、
-## 11、
+## 
+## 11、拉取项目到本地，运行： npm install 安装组件后，运行： npm start
 ## 12、
 ## 13、
 
