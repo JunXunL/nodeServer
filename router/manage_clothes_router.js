@@ -26,16 +26,16 @@ router.get('/show', (req, res)=>{
 })
 
 router.post('/add', (req, res)=>{
-	// let data = {
-	// 	"s_name": "你好",
-	// 	"s_code": "hello"
-	// }
-	// // let {s_name, s_code} = req.body
-	// SeasonSchema.insertMany(data).then((data)=>{
-	// 	res.send({err:0, msg:'insert OK'})
-	// }).catch((err)=>{
-	// 	res.send({err:-1, msg:'insert error'})
-	// })
+	let data = {
+		"s_name": "你好",
+		"s_code": "hello"
+	}
+	// let {s_name, s_code} = req.body
+	SeasonSchema.insertMany(data).then((data)=>{
+		res.send({err:0, msg:'insert OK'})
+	}).catch((err)=>{
+		res.send({err:-1, msg:'insert error'})
+	})
 	
 	
 })

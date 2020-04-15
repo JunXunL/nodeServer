@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')//node.js操作MongoDB的第三方插件
+const mongoose = require('mongoose')//node.js操作MongoDB的第三方插件，npm install mongoose
 
 // 以下提供众多方式中的3种 ------------------ begin ------------------------------------
 // 方式一: with mongodb:// URI
@@ -25,7 +25,8 @@ const mongoose = require('mongoose')//node.js操作MongoDB的第三方插件
 //   useMongoClient: true,
 //   connectTimeoutMS: 1000
 // });
-mongoose.connect('mongodb://localhost/nodeService',{ useMongoClient: true});
+mongoose.connect('mongodb://localhost/zyltestdb');
+// mongoose.connect('mongodb://localhost/zyltestdb',{ useMongoClient: true});
 //报错信息: DeprecationWarning: Mongoose: mpromise (mongoose's default promise library) is deprecated, plug in your own promise library instead: http://mongoosejs.com/docs/promises.html
 mongoose.Promise = global.Promise;  //要加上这句代码
 var db = mongoose.connection;//数据库的连接对象
