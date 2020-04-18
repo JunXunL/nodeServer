@@ -45,7 +45,7 @@
             alert("你的答案是：" + result);
           }
         };
-        xmlhttp.open("POST", "http://localhost:3000/checkAnswer", true); // 与nodeserver服务器端的路由一致
+        xmlhttp.open("POST", "http://localhost:3000/ajaxDemo/checkAnswer", true); // 与nodeserver服务器端的路由一致
         xmlhttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
         xmlhttp.send("answer1=" + answer1 + "&answer2=" + answer2);
       }
@@ -59,7 +59,7 @@
             document.getElementById('showAnswer').innerHTML = obj.answer1 + ',' + obj.answer2 + '。';
           }
         };
-        xmlhttp.open("GET", "http://localhost:3000/lookAnswer", true);
+        xmlhttp.open("GET", "http://localhost:3000/ajaxDemo/lookAnswer", true);
         xmlhttp.send();
       }
     </script>
