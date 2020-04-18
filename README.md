@@ -25,5 +25,36 @@
 ## 
 ## 11、拉取项目到本地，运行： npm install 安装组件后，运行： npm start
 ## 12、
-## 13、
+## 
+## 
+## 
+## 
+## 
+## 
+## 
+# app.engine(ext, callback);
+## Express默认使用jade模板。如果你尝试加载 "foo.jade" 文件，Express内部会调用如下操作。
+## : app.engine('jade', require('jade').__express);
+### 
+## 如果要使用其他模板引擎，如：将EJS模板映射至".html"文件：
+## : app.engine('html', require('ejs').__express);
+## 这行代码中，实际调用了EJS的.renderFile()方法，ejs.__express是该方法在EJS内部的另一个名字。
+## 因为加载的模板引擎后调用的是同一个方法.__express，所以如果使用的是ejs模板，不用配置该项。
+## 总结：使用html模板，需增加  app.engine('html', require('ejs').__express);　使用EJS模板，不用配置该项。
+
+## 此时如果在views文件夹里创建index.html文件或index.ejs文件，访问的仍然是默认的index.jade文件。这是为什么呢？这里要说的就是上面提到的第二项设置app.set('view engine', 'html');
+## 
+## app.set(name, value);
+## 在.set()方法的参数中，有一项是'view engine'，表示没有指定文件模板格式时，默认使用的引擎插件。如果这里设置为html文件，设置路由指定文件时，只需写文件名，就会找对应的html文件。于此，脑洞大开，试了一下在views中创建3个文件test.jade、test.ejs、test.html。路由设置如下。访问正常！每个路由都指向对应的文件。当然这种写法是完全不被建议也不符合现实的。
+### router.get('/test/',function(req, res, next){
+###   res.render('test', {title: 'HTML'});
+### });
+### 
+### router.get('/test1/',function(req, res, next){
+###   res.render('test.ejs', {title: 'EJS'});
+### });
+### 
+### router.get('/test2/',function(req, res, next){
+###   res.render('test.jade', {title: 'jade});
+### });
 
