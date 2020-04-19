@@ -6,13 +6,16 @@ const logger = require('morgan');
 // const session = require("express-session");
 // const bodyParser = require('body-parser')
 
+//引入数据配置文件,即连接数据
+const mongodb = require('./mongodb/config_db')
+
 // 引入route模块
 const indexRouter = require('./routes/index');
 const ajaxDemoRouter = require('./routes/ajaxDemo'); // 用ajax，练习GET/POST请求方式
 const formMethodRouter = require('./routes/form_method_get_post') // 用表单提交方式，练习GET/POST请求方式
 const uploadFileRouter = require('./routes/uploadFile'); // 上传文件练习
 const usersRouter = require('./routes/users');
-// const m_clother_rt = require('./router/manage_clothes_router')// 服装管理, 路由
+const testMongoRouter = require('./routes/testMongoDB')// 服装管理, 路由
 
 const app = express();
 app.set('views', path.join(__dirname, 'views'));
@@ -33,6 +36,7 @@ app.use('/ajaxDemo', ajaxDemoRouter)
 app.use('/formMethod', formMethodRouter)
 app.use('/fileUpload', uploadFileRouter)
 app.use('/users', usersRouter);
+app.use('/testMongo', testMongoRouter)
 // app.use('/mclothes', m_clother_rt)
 
 //配置session中间件

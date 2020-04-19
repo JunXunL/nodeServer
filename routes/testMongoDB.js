@@ -11,7 +11,18 @@ router.get('/show', (req, res)=>{
 	})
 	.catch((err)=>{
 		res.send(err)
-	})
+  })
+  // 模拟插入数据，项目启动后，使用MongoDB，先建库，建“表结构”Schema，然后插入数据
+  // let data = {
+	// 	"s_name": "你好",
+	// 	"s_code": "hello"
+	// }
+	// // let {s_name, s_code} = req.body
+	// SeasonSchema.insertMany(data).then((data)=>{
+	// 	res.send({err:0, msg:'insert OK'})
+	// }).catch((err)=>{
+	// 	res.send({err:-1, msg:'insert error'})
+	// })
 })
 
 router.post('/add', (req, res)=>{

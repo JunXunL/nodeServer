@@ -22,7 +22,7 @@
 # 4、安装 MongoDB服务
 ## 在MongoDB的bin目录下，通过执行mongod.exe，使用--install选项来安装服务，使用--config选项来指定之前创建的配置文件。
 ## 输入：C:\mongodb\bin\mongod.exe --config "C:\mongodb\mongod.cfg" --install
-# 5、-----启动数据库，在MongoDB/bin的路径，在控制台输入：mongod --dbpath D:\software\MongoDB\data
+# 5、☆☆--1---启动数据库，在MongoDB/bin的路径，在控制台输入：mongod --dbpath D:\software\MongoDB\data
 ## 注：--dbpath是指定数据库存放目录，要注意dbpath前有两个“-”。 返回“waiting for connections on port 27017”，表明mongodb服务器已经启动，正在27017窗口等待连接。
 # -------------------------------------------------------
 # 6、将MongoDB服务器作为Windows服务运行
@@ -36,7 +36,7 @@
 ## 打开浏览器，范围地址http://127.0.0.1:27017/,可看到如下信息
 ## It looks like you are trying to access MongoDB over HTTP on the native driver port.
 # -----------------------------------------------------------
-# 7、重新打开一个命令窗口，输入：mongo
+# 7、☆☆--2---重新打开一个命令窗口，输入：mongo
 ## 1）创建数据库语法格式：use DATABASE_NAME ， 如下：
 #### > use zyltestdb  
 #### switched to db mongo  
