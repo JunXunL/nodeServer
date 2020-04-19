@@ -15,7 +15,7 @@ router.get('/getMethod', function (req, res) {
       last_name:req.query.last_name
    };
    console.log(response);
-   res.end(JSON.stringify(response));
+   res.end(JSON.stringify(response)); //向客户端返回内容
 })
 
 router.get('/processPost', function (req, res) {
@@ -28,7 +28,7 @@ router.post('/postMethod', urlencodedParser, function (req, res) {
       last_name:req.body.last_name
    };
    console.log(response);
-   res.end(JSON.stringify(response));
+   res.end(JSON.stringify(response)); //向客户端返回内容
 })
 
 module.exports = router
