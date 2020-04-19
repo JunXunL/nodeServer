@@ -3,9 +3,9 @@ const express = require('express')
 const router = express.Router()
 
 // ajaxDemo-post的加载页面
-// 项目启动，http://localhost:3000/ajaxDemo/ajaxDemo-post，打开views下的ajaxDemo-post.html页面
-router.get('/ajaxDemo-post', function(req, res){ // 设置路由名称
-  res.render('ajaxDemo-post'); // 加载模板文件
+// 项目启动，http://localhost:3000/ajaxDemo/index，打开views下的ajaxDemo-post.html页面
+router.get('/index', function(req, res){ // 设置路由名称
+  res.render('ajaxDemo'); // 加载模板文件
 })
 // 检查答案的路由
 router.post('/checkAnswer', function(req,res){
@@ -16,10 +16,6 @@ router.post('/checkAnswer', function(req,res){
   }else{
     res.send('正确！');
   }
-});
-// ajaxDemo-get的加载页面
-router.get('/ajaxDemo-get',function(req,res){
-  res.render('/ajaxDemo-get');
 });
 //查看答案的路由
 router.get('/lookAnswer',function(req,res){

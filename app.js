@@ -1,17 +1,19 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 // const session = require("express-session");
+const bodyParser = require('body-parser')
 
 // 引入route模块
-var indexRouter = require('./routes/index'); //  项目启动，默认http://localhost:3000 访问views/index.html，测试路由配置成功
-var ajaxDemoRouter = require('./routes/ajaxDemo');
-var uploadFileRouter = require('./routes/uploadFile');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const ajaxDemoRouter = require('./routes/ajaxDemo'); // 用ajax，练习GET/POST请求方式
+const uploadFileRouter = require('./routes/uploadFile'); // 上传文件练习
+const usersRouter = require('./routes/users');
+// const m_clother_rt = require('./router/manage_clothes_router')// 服装管理, 路由
 
-var app = express();
+const app = express();
 app.set('views', path.join(__dirname, 'views'));
 // var ejs = require('ejs');  // -1.新引入的ejs插件
 app.engine('.html', require('ejs').renderFile); // 等同于：app.engine('.html', require('ejs').__express); // -2.设置html引擎
@@ -25,11 +27,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // app.use(express.static('views/pages'))
 
-//加载admin模块
 app.use('/', indexRouter); //  项目启动，默认http://localhost:3000 访问views/index.html，测试路由配置成功
 app.use('/ajaxDemo', ajaxDemoRouter)
 app.use('/fileUpload', uploadFileRouter)
 app.use('/users', usersRouter);
+// app.use('/mclothes', m_clother_rt)
 
 //配置session中间件
 // app.use(session({
@@ -39,6 +41,15 @@ app.use('/users', usersRouter);
 //   cookie:{maxAge:1000*60*30},
 //   rolling:true
 // }));
+
+// 使用bodyParser解析以下格式
+app.use(bodyParser.urlencoded({ extended: false }))// parse application/x-www-form-urlencoded , 表单格式 , 解析POST请求方式中返回的req.body
+app.use(bodyParser.json())// parse application/json , JSON格式
+app.use(function (req, res) {
+  res.setHeader('Content-Type', 'text/plain') // 纯文本格式
+  res.write('you posted:\n')
+  res.end(JSON.stringify(req.body, null, 2))
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
