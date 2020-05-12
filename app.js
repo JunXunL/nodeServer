@@ -28,8 +28,10 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+//将静态文件目录设置为：项目根目录+/public
+// app.use(express.static(__dirname + '/public'));
+//或者
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use(express.static('views/pages'))
 
 app.use('/', indexRouter); //  项目启动，默认http://localhost:3000 访问views/index.html，测试路由配置成功
 app.use('/ajaxDemo', ajaxDemoRouter)
