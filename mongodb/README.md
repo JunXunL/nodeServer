@@ -36,7 +36,7 @@
 ## 打开浏览器，范围地址http://127.0.0.1:27017/,可看到如下信息
 ## It looks like you are trying to access MongoDB over HTTP on the native driver port.
 # -----------------------------------------------------------
-# 7、☆☆--2---重新打开一个命令窗口，输入：mongo
+# 7、☆☆--2---重新打开一个命令窗口（cmd），输入：mongo
 ## 1）创建数据库语法格式：use DATABASE_NAME ， 如下：
 #### > use zyltestdb  
 #### switched to db mongo  
