@@ -20,17 +20,15 @@ const testMongoRouter = require('./routes/testMongoDB')// 服装管理, 路由
 const app = express();
 app.set('views', path.join(__dirname, 'views'));
 // var ejs = require('ejs');  // -1.新引入的ejs插件
-app.engine('.html', require('ejs').renderFile); // 等同于：app.engine('.html', require('ejs').__express); // -2.设置html引擎
-// app.set('views', path.join(__dirname, 'views/'));
+app.engine('.html', require('ejs').renderFile); // -2.设置html引擎
 app.set('view engine', 'html'); // -3.设置视图引擎，为html
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-//将静态文件目录设置为：项目根目录+/public
-// app.use(express.static(__dirname + '/public'));
-//或者
+
+//设置静态文件目录
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter); //  项目启动，默认http://localhost:3000 访问views/index.html，测试路由配置成功
