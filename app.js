@@ -1,8 +1,8 @@
-const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const createError = require('http-errors');
 // const session = require("express-session");
 // const bodyParser = require('body-parser')
 
@@ -11,11 +11,7 @@ const mongodb = require('./mongodb/config_db')
 
 // 引入route模块
 const indexRouter = require('./routes/index');
-const ajaxDemoRouter = require('./routes/ajaxDemo'); // 用ajax，练习GET/POST请求方式
-const formMethodRouter = require('./routes/form_method_get_post') // 用表单提交方式，练习GET/POST请求方式
-const uploadFileRouter = require('./routes/uploadFile'); // 上传文件练习
-const usersRouter = require('./routes/users');
-const testMongoRouter = require('./routes/testMongoDB')// 服装管理, 路由
+const clothRouter = require('./routes/cloth')// 服装管理, 路由
 
 const app = express();
 app.set('views', path.join(__dirname, 'views'));
@@ -32,12 +28,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter); //  项目启动，默认http://localhost:3000 访问views/index.html，测试路由配置成功
-app.use('/ajaxDemo', ajaxDemoRouter)
-app.use('/formMethod', formMethodRouter)
-app.use('/fileUpload', uploadFileRouter)
-app.use('/users', usersRouter);
-app.use('/testMongo', testMongoRouter)
-// app.use('/mclothes', m_clother_rt)
+app.use('/mclothes', clothRouter)
 
 //配置session中间件
 // app.use(session({
@@ -73,6 +64,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen("3001","127.0.0.1");
+app.listen("3000","127.0.0.1");
 
 module.exports = app;
