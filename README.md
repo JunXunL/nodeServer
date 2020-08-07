@@ -57,4 +57,15 @@
 ### router.get('/test2/',function(req, res, next){
 ###   res.render('test.jade', {title: 'jade});
 ### });
-
+### 
+# 添加热更新：nodemon插件
+## 1：全局引入  npm install -g nodemon
+## 2：作为依赖引入  npm install --save-dev nodemon
+## 3：启动方式有两种 ，一种 直接命令行输入 nodemon app.js；另一种在package.json里使用"start":"nodemon app.js"替换"start":"node ./bin/www"运行 npm start 即可
+### 
+### 
+### 
+### 
+### 
+### 
+### 

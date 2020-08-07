@@ -4,6 +4,18 @@
     <meta charset="UTF-8" />
   </head>
   <body>
-    <h1>首页</h1>
+    <form action="/users/add" method="POST">
+      <div>
+        <label for="userName">名称：</label>
+        <input type="text" id="userName" name="userName" />
+      </div>
+      <div>
+        <label for="passWord">密码：</label>
+        <input type="password" id="passWord" name="passWord" />
+      </div>
+      <div>
+        <button type="submit">确定</button>
+      </div>
+    </form>
   </body>
 </html>
