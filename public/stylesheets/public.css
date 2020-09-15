@@ -1,0 +1,23 @@
+@import 'style.css';
+
+/* 设置标题 */
+.title {font-family: "微软雅黑"; font-weight: bold; color: #000; letter-spacing: 2px; cursor: pointer;}
+
+
+/* 设置字体 */
+.size-30 {font-size: 30px;}
+.size-20 {font-size: 30px;}
+.induction {font-family: "微软雅黑"; color: #222; letter-spacing: 1px; cursor: pointer;}
+
+
+
+
+/* 设置容器 */
+.main-box { display: block;} /* 设置最外层的容器 */
+.content-box {display: block;} /* 设置包含文字的容器 */
+.content {display: block;} /* 设置文字的容器 */
+.flex-row { display: flex; flex-flow: row wrap; justify-self: flex-start;}
+.flex-column { display: flex; flex-flow: column; justify-self: flex-start;}
+
+
+

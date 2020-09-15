@@ -1,6 +1,8 @@
-const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
+const fs = require("fs");
+const url = require("url");
+const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 // const session = require("express-session");
@@ -8,6 +10,9 @@ const logger = require('morgan');
 
 //引入数据配置文件,即连接数据
 const mongodb = require('./mongodb/config_db')
+
+// 引入，mime类型，文件的后缀名
+const mime = require('./modle/utils/mime')
 
 // 引入route模块
 const indexRouter = require('./routes/index');
@@ -59,6 +64,40 @@ app.use('/testMongo', testMongoRouter)
 //   res.end(JSON.stringify(req.body, null, 2))
 // })
 
+/**
+ * 为app添加方法，相当于把该方法写在http.createServer内；
+ * 将HTML、css、js等文件响应给客户端
+ */
+app.use(function(req, res){
+  let pathName = url.parse(req.url).pathname; //转换为url对象
+  // 默认加载路径
+  if(pathName == '/') {
+    pathName = "/index.html";
+  }
+  let extName = path.extname(pathName); //获取文件后缀名
+  fs.readFile("./../public/" + pathName, (err, data) => {
+    if(err) { //出错则返回404页面
+      console.log("404 Not Found!");      
+      fs.readFile("views/error.html", (errorNotFound, dataNotFound) => {
+        if(errorNotFound) {
+          console.log(errorNotFound);
+        } else {
+          res.writeHead(200, {"Content-Type": "text/html;charset=utf-8"});
+          res.write(dataNotFound); //返回404页面
+          res.end();
+        }
+      })
+      return;
+    } else {
+      let ext = mime.getMime(extName); // 获取对应后缀的文件类型
+      // 响应客户端，设置请求头，将文件内容发回去；通过后缀名指定mime类型
+      res.writeHead(200, {"Content-Type": ext + "; charset=utf-8"});
+      res.write(data); //返回请求文件
+      res.end();
+    }
+  })
+})
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -74,6 +113,22 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+//设置跨域请求
+// app.all('*',function(req, res, next){
+//   //设置请求头
+//   //允许所有来源访问
+//   res.header('Access-Control-Allow-Origin', '*')
+//   //用于判断request来自ajax还是传统请求
+//   res.header('Access-Control-Allow-Headers', 'X-Requested-With')
+//   //允许访问的方式
+//   res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
+//   //修改程序信息与版本
+//   res.header('X-Powered-By', ' 3.2.1')
+//   //内容类型：如果是post请求必须指定这个属性
+//   res.header('Content-Type', 'application/json;charset=utf-8')
+//   next()
+// })
 
 app.listen("3001","127.0.0.1");
 
