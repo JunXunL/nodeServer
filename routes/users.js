@@ -18,11 +18,8 @@ const UserMain = require('../mongodb/modle/u_user_main')
 router.post('/login', urlencodedParser, function(req, res) {
   UserMain.findById({u_name: req.body.userName, u_pwd: req.body.passWord}, function (err, data) {
     console.log(data)
-    res.json({status:1, data :data});
-    // res.render( "pages/user/userList", { title: '用户信息列表', userList: myList.toArray() } );
+    res.redirect('/users/show')
   })
-  // res.status(200).send('<h1>hello world</h1>');
-  // res.send('respond with a resource');
 });
 
 // 插入数据
@@ -47,16 +44,13 @@ router.post('/add', urlencodedParser, (req, res) => {
 
 // 返回列表数据
 router.get("/show", function(req, res, next) {
-  let list
   UserMain.find().then((data)=>{
     console.log("------------------------")
     console.log(data)
-    list = data
+    res.locals.title = "已注册用户列表"
+    res.locals.list = data
+    res.render("pages/user/userList")
   })
-  res.locals.title = "data"
-  res.locals.list = list
-  res.locals.test = "test"
-  res.render("pages/user/userList")
 })
 
 module.exports = router;

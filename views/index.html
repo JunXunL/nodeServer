@@ -4,34 +4,43 @@
     <meta charset="UTF-8" />
     <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="stylesheets/public.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/index.css">
+    <script type="text/javascript">
+      // var selfAjax = require('SelfAjax')(username,pass);
+    </script>
+    <script type="text/javascript" src="javascripts/isEmpty.js"></script>
+    <script type="text/javascript" src="javascripts/ajax.js"></script>
+    <script type="text/javascript" src="javascripts/upload.js"></script>
   </head>
   <body>
-    <!-- <form action="/users/add" method="POST">
-      <div>
-        <label for="userName">名称：</label>
-        <input type="text" id="userName" name="userName" />
-      </div>
-      <div>
-        <label for="passWord">密码：</label>
-        <input type="password" id="passWord" name="passWord" />
-      </div>
-      <div>
-        <button type="submit">确定</button>
-      </div>
-    </form> -->
-    <div>
+    <!--  -->
+    <div class="contain">
       <div class="title size-30">小吃店后台</div>
       <div class="main-box flex-row">
-        <div class="content-box flex-column">
-          <div class="title size-20" onclick="uploadImg()">图库</div>
+        <div class="content-box flex-column" onclick="uploadImages()">
+          <div class="title size-20">点击跳转</div>
           <div class="content">
-            <span class="induction">为不同模块添加图片，按照路径上传图片</span>
+            <span class="induction">为不同模块添加图片，按照路径上传图片。功能未完成，ajax请求，返回responseTxt。</span>
           </div>
         </div>
         <div class="content-box">
-          <div class="title size-20">占位标题2</div>
+          <div class="title size-20">模仿登录功能</div>
           <div class="content">
-            <span class="induction">占位简介</span>
+            <span class="induction">
+              <form action="/users/login" method="POST">
+                <div>
+                  <label for="userName">姓名：</label>
+                  <input type="text" id="userName" name="userName" />
+                </div>
+                <div>
+                  <label for="passWord">密码：</label>
+                  <input type="password" id="passWord" name="passWord" />
+                </div>
+                <div>
+                  <button type="submit">确定</button>
+                </div>
+              </form>
+            </span>
           </div>
         </div>
         <div class="content-box">

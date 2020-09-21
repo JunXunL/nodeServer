@@ -23,6 +23,30 @@ const usersRouter = require('./routes/users');
 const testMongoRouter = require('./routes/testMongoDB')// 服装管理, 路由
 
 const app = express();
+
+// 解决跨域请求
+app.all('*', function (req, res, next) {
+  // 设置请求头
+  res.header('Access-Control-Allow-Origin', '*');  //设置允许跨域的域名，* 代表允许任意域名跨域，允许所有来源访问
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With');//允许的header类型
+  // res.header('Access-Control-Allow-Headers', 'X-Requested-With') // 用于判断request来自ajax还是传统请求
+  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS'); // 跨域允许的请求方式
+  // res.header('X-Powered-By', ' 3.2.1') // 修改程序信息与版本
+  // res.header('Content-Type', 'application/json;charset=utf-8') // 内容类型：如果是post请求必须指定这个属性
+  if (req.method == 'OPTIONS') {
+    /**
+     * 常用的返回方式有四种
+     * res.json([status|body], [body])  以json的形式返回数据
+     * res.render(view [, locals] [, callback])  返回对应的view和数据，此方法可以有回调函数，以处理可能出现的异常
+     * res.send([body|status], [body])  返回自定义的数据，比如json或者404等状态
+     * res.redirect([status,] path)  这个方法其实不是返回，而是跳转到另外一个url上
+     */
+    res.send(200);//让options尝试请求快速结束
+  } else {
+    next();
+  }
+});
+
 app.set('views', path.join(__dirname, 'views'));
 // var ejs = require('ejs');  // -1.新引入的ejs插件
 app.engine('.html', require('ejs').renderFile); // 等同于：app.engine('.html', require('ejs').__express); // -2.设置html引擎
@@ -77,11 +101,12 @@ app.use(function(req, res){
   let extName = path.extname(pathName); //获取文件后缀名
   fs.readFile("./../public/" + pathName, (err, data) => {
     if(err) { //出错则返回404页面
-      console.log("404 Not Found!");      
+      console.log(pathName + " 404 Not Found!");      
       fs.readFile("views/error.html", (errorNotFound, dataNotFound) => {
         if(errorNotFound) {
           console.log(errorNotFound);
         } else {
+          // response.writeHead(响应状态码，响应头对象): 发送一个响应头给请求。
           res.writeHead(200, {"Content-Type": "text/html;charset=utf-8"});
           res.write(dataNotFound); //返回404页面
           res.end();
@@ -113,22 +138,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-//设置跨域请求
-// app.all('*',function(req, res, next){
-//   //设置请求头
-//   //允许所有来源访问
-//   res.header('Access-Control-Allow-Origin', '*')
-//   //用于判断request来自ajax还是传统请求
-//   res.header('Access-Control-Allow-Headers', 'X-Requested-With')
-//   //允许访问的方式
-//   res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
-//   //修改程序信息与版本
-//   res.header('X-Powered-By', ' 3.2.1')
-//   //内容类型：如果是post请求必须指定这个属性
-//   res.header('Content-Type', 'application/json;charset=utf-8')
-//   next()
-// })
 
 app.listen("3001","127.0.0.1");
 

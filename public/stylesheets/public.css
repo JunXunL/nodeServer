@@ -6,8 +6,8 @@
 
 /* 设置字体 */
 .size-30 {font-size: 30px;}
-.size-20 {font-size: 30px;}
-.induction {font-family: "微软雅黑"; color: #222; letter-spacing: 1px; cursor: pointer;}
+.size-20 {font-size: 20px;}
+.induction {font-family: "微软雅黑"; color: #222; letter-spacing: 1px; cursor: pointer;font-size: 14px;line-height: 20px;text-align: left;width: 100%;text-overflow: ellipsis;overflow: hidden;}
 
 
 
@@ -15,7 +15,7 @@
 /* 设置容器 */
 .main-box { display: block;} /* 设置最外层的容器 */
 .content-box {display: block;} /* 设置包含文字的容器 */
-.content {display: block;} /* 设置文字的容器 */
+.content {display: block; padding: 10px;} /* 设置文字的容器 */
 .flex-row { display: flex; flex-flow: row wrap; justify-self: flex-start;}
 .flex-column { display: flex; flex-flow: column; justify-self: flex-start;}
 
