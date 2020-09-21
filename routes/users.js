@@ -16,9 +16,16 @@ const UserMain = require('../mongodb/modle/u_user_main')
  * 由于app.locals在当前应用所有的渲染模中访问，这样我们就可以在该对象中定义一些顶级/全局的数据，并在渲染模板中使用。
 */
 router.post('/login', urlencodedParser, function(req, res) {
-  UserMain.findById({u_name: req.body.userName, u_pwd: req.body.passWord}, function (err, data) {
-    console.log(data)
-    res.redirect('/users/show')
+  UserMain.findOne({u_name: req.body.userName, u_pwd: req.body.passWord}, function (err, data) {
+    if (err) {
+      res.json({  
+        status: 1,  
+        msg: err.message  
+      })
+    } else {
+      console.log(data)
+      res.redirect('/users/show')
+    }
   })
 });
 
