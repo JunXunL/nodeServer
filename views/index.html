@@ -17,10 +17,20 @@
     <div class="contain">
       <div class="title size-30">小吃店后台</div>
       <div class="main-box flex-row">
-        <div class="content-box flex-column" onclick="uploadImages()">
-          <div class="title size-20">点击跳转</div>
+        <div class="content-box flex-column">
+          <div class="title size-20">上传图片</div>
           <div class="content">
-            <span class="induction">为不同模块添加图片，按照路径上传图片。功能未完成，ajax请求，返回responseTxt。</span>
+            <span class="induction">
+              <p>为不同模块添加图片，按照路径上传图片。</p>
+              <span style="display: block;width: 100%;">
+                <a href="/fileUpload/upload">Ajax原生请求</a>
+                点击跳转到上传图片页面。
+              </span>
+              <span style="display: block;width: 100%;">
+                <p onclick="uploadImages()">Ajax原生请求</a>
+                功能未完成，ajax请求，返回responseTxt。
+              </span>
+            </span>
           </div>
         </div>
         <div class="content-box">
