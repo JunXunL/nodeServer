@@ -2,6 +2,7 @@
 const express = require('express')
 const router = express.Router()
 const fs = require("fs");
+const Image = require("../mongodb/modle/s_images")
 
 // 用于处理 multipart/form-data 类型的表单数据，它主要用于上传文件
 const multer  = require('multer'); // npm install --save multer
@@ -26,20 +27,37 @@ router.post('/file_upload', function (req, res) {
   fs.readFile( files.path, function (err, data) {
     fs.writeFile(des_file, data, function (err) {
       let response
-      if( err ){
-        console.log( err );
+      if(err){
+        console.log(err);
       }else{
-        // 输出 JSON 格式
-        response = {
-          message:'File uploaded successfully', 
-          filename:files.originalname
-        };
-
+        // 把图片地址存入数据库
+        Image.insertMany({"s_url":des_file.substr(6), "s_type": "swipe"}).then(result => {
+          console.log(result) // mongodb返回保存的对象
+          // 输出 JSON 格式
+          response = {
+            message:'File uploaded successfully', 
+            filename:files.originalname
+          };
+          console.log(response);
+          res.end(JSON.stringify(response));
+        })
       }
-      console.log(response);
-      res.end(JSON.stringify(response));
     });
   });
 })
+
+router.get("/showImages/:param", (req, res)=>{
+  // console.log('参数为： ' + req.params.param);
+  if((req.params != null) && (req.params.param != null)) {
+    Image.find({"s_type": req.params.param}).then(data => {
+      // console.log(data)
+      res.json({
+        status: 1,
+        content: data
+      })
+    })
+  }
+})
+  
 
 module.exports = router;
