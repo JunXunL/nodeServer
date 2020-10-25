@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8"/>
+</head>
+<body>
+  <ul>
+    <%= locals.title %>
+    <br>
+    <% if (locals.list) { %>
+      <% locals.list.forEach(function(v,i,a){ %>
+        <li><%=v %></li>
+      <% }); %>
+    <% } %>
+  </ul>
+</body>
