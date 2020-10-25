@@ -1,16 +1,51 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>文件上传</title>
-	</head>
-	<body>
-		<h3>文件上传：</h3>
-		选择一个文件上传: <br />
-		<form action="/fileUpload/file_upload" method="post" enctype="multipart/form-data">
-			<input type="file" name="image" size="50" />
-			<br />
-			<input type="submit" value="上传文件" />
-		</form>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+    <title>文件上传</title>
+    <script type="text/javascript" src="../javascripts/isEmpty.js"></script>
+    <script type="text/javascript" src="../javascripts/ajax.js"></script>
+    <script type="text/javascript" src="../javascripts/upload.js"></script>
+  </head>
+  <body>
+    <h3>默认路径上传图片：</h3>
+    选择一个文件上传: <br />
+    <form action="/fileUpload/file_upload" method="post" enctype="multipart/form-data">
+      <input type="file" name="image" size="50" />
+      <br />
+      <input type="submit" value="上传文件" />
+    </form>
+    <br/>
+    <br/>
+    <h3>选择路径上传图片：</h3>
+    <div>
+      <div>
+        <div>
+          <label for="path">存放目录：</label>
+          <input type="text" name="path" id="path" size="50"/>
+          <span onclick="newPath()" id="path-submit">确认</span>
+        </div>
+        <div id="path-error" style="display: none;color: red;">存放图片的目录新建失败！</div>
+      </div>
+      <form action="/fileUpload/uploadImage" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="newPath" id="newPath" />
+        <div>
+          <label for="title">图片名称：</label>
+          <input type="text" name="title" id="title" size="50"/>
+        </div>
+        <div>
+          <label for="type">图片类型：</label>
+          <input type="text" name="type" id="type" size="50"/>
+        </div>
+        <div>
+          <label for="image">选择图片：</label>
+          <input type="file" name="image" id="image" size="50" />
+        </div>
+        <div>
+          <input type="submit" value="上传文件" />
+        </div>
+      </form>
+    </div>
+  </body>
 </html>
