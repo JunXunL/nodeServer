@@ -26,6 +26,7 @@ const app = express();
 
 // 解决跨域请求
 app.all('*', function (req, res, next) {
+  console.log("---------------app.all------------------")
   // 设置请求头
   res.header('Access-Control-Allow-Origin', '*');  //设置允许跨域的域名，* 代表允许任意域名跨域，允许所有来源访问
   res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With');//允许的header类型
@@ -93,6 +94,9 @@ app.use('/testMongo', testMongoRouter)
  * 将HTML、css、js等文件响应给客户端
  */
 app.use(function(req, res){
+  res.setHeader("Content-type","application/json")
+  // res.header(200, {'Content-Type': 'text/html; charset=utf-8'});
+  console.log("-------------1--------------------")
   let pathName = url.parse(req.url).pathname; //转换为url对象
   // 默认加载路径
   if(pathName == '/') {
@@ -101,7 +105,7 @@ app.use(function(req, res){
   let extName = path.extname(pathName); //获取文件后缀名
   fs.readFile("./../public/" + pathName, (err, data) => {
     if(err) { //出错则返回404页面
-      console.log(pathName + " 404 Not Found!");      
+      console.log(pathName + " 404 Not Found!");
       fs.readFile("views/error.html", (errorNotFound, dataNotFound) => {
         if(errorNotFound) {
           console.log(errorNotFound);
@@ -125,11 +129,13 @@ app.use(function(req, res){
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+  console.log("---------------2------------------")
   next(createError(404));
 });
 
 // error handler
 app.use(function(err, req, res, next) {
+  console.log("----------------3-----------------")
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
