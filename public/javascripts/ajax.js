@@ -10,8 +10,10 @@ function getXmlHttpObject() {
   if (window.XMLHttpRequest) {
     // code for IE7+, Firefox, Chrome, Opera, Safari
     xmlHttp = new XMLHttpRequest();
-  } else {
+  } else if (window.ActiveXObject) {
     xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+  } else {
+    alert("你使用的浏览器不支持XMLHttpRequest");
   }
   return xmlHttp
 }
@@ -46,28 +48,38 @@ function ajaxGet(url, fn) {
       // var xmlDoc = xmlHttp.responseXML.documentElement; 
       // var xSel = xmlDoc.getElementsByTagName("select");//得到xml文档中，节点为select的对象
       
-      // fn.call(this, xmlHttp.responseText);
-
-      console.log(xmlHttp.responseText)
+      console.log(xmlHttp.responseText);
+      fn.call(this, xmlHttp.responseText);
     }
   }
   xmlHttp.send(); // 发送请求
 }
 
 // param 格式'a=a1&b=b1'这种字符串格式，在jq里如果data为对象会自动将对象转成这种字符串格式
-function ajaxPost(url, param, fu) {
+function ajaxPost(url, param, fn) {
+  // 1. 创建一个xmlhttpRequest对象
   const xmlHttp = getXmlHttpObject();
-  if (isEmpty(xmlHttp)) return;
+  // console.log(isXMLHttpRequest(xmlHttp))
+  if (!isXMLHttpRequest(xmlHttp)) return;
 
+  // 2. 打开一个连接
   xmlHttp.open("POST", url, true);
-  // 添加http头，发送信息至服务器时内容编码类型
-  xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  xmlHttp.onreadystatechange = () => {
+
+  // 3. 设置请求头
+  xmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+
+  // 4. 设置回调监听
+  xmlHttp.onreadystatechange = function() {
+    console.log("readyState:" + xmlHttp.readyState)
+    console.log("status:" + xmlHttp.status)
     if (xmlHttp.readyState == 4 && (xmlHttp.status == 200 || xmlHttp.status == 304)) {
+      console.log(xmlHttp.responseText);
       fn.call(this, xmlHttp.responseText);
     }
   }
-  xmlHttp.send(param) // 发送请求 + 数据
+  
+  // 5. 发送
+  xmlHttp.send("path=" + param) // 发送请求 + 数据；请求体body，用&分隔。引用：req.body.name
 }
 
 
