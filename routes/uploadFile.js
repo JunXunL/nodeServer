@@ -142,17 +142,28 @@ router.post('/uploadImage', urlencodedParser, function (req, res) {
 })
 
 router.get("/showImages/:param", (req, res)=>{
-  // console.log('参数为： ' + req.params.param);
-  if((req.params != null) && (req.params.param != null)) {
-    Image.find({"s_type": req.params.param}).then(data => {
-      // console.log(data)
-      res.json({
-        status: 1,
-        content: data
+  console.log('参数为： ', req.params);
+  if(req.params != null) {
+    if ((req.params.param != null) && (req.params.param != '')) {
+      Image.find({"s_type": req.params.param}).then((data) => {
+        console.log(data)
+        res.json({
+          status: "1",
+          content: data
+        })
       })
-    })
+    }
   }
 })
-  
+
+router.get("/getAllImages", (req, res)=>{
+  Image.find().then((data) => {
+    console.log(data)
+    res.json({
+      status: "1",
+      content: data
+    })
+  })
+})
 
 module.exports = router;
