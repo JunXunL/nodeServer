@@ -9,18 +9,17 @@ const logger = require('morgan');
 // const bodyParser = require('body-parser')
 
 //引入数据配置文件,即连接数据
-const mongodb = require('./mongodb/config_db')
+const mysql = require('./mysql/db'); // 连接数据库测试
+// const createdb = require('./mysql/createdb'); // 创建mysql数据库（只需一次）：nodeserverdb
 
 // 引入，mime类型，文件的后缀名
 const mime = require('./modle/utils/mime')
 
 // 引入route模块
 const indexRouter = require('./routes/index');
-const ajaxDemoRouter = require('./routes/ajaxDemo'); // 用ajax，练习GET/POST请求方式
-const formMethodRouter = require('./routes/form_method_get_post') // 用表单提交方式，练习GET/POST请求方式
 const uploadFileRouter = require('./routes/uploadFile'); // 上传文件练习
 const usersRouter = require('./routes/users');
-const testMongoRouter = require('./routes/testMongoDB')// 服装管理, 路由
+
 
 const app = express();
 
@@ -64,12 +63,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter); //  项目启动，默认http://localhost:3000 访问views/index.html，测试路由配置成功
-app.use('/ajaxDemo', ajaxDemoRouter)
-app.use('/formMethod', formMethodRouter)
+
+
 app.use('/fileUpload', uploadFileRouter)
 app.use('/users', usersRouter);
-app.use('/testMongo', testMongoRouter)
-// app.use('/mclothes', m_clother_rt)
+
 
 //配置session中间件
 // app.use(session({
