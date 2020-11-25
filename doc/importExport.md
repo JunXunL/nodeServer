@@ -2,8 +2,9 @@
  * @Descripttion: exports、module.exports 和 export、export default等区别
  * @Author: Irene.Z
  * @Date: 2020-11-24 14:29:31
- * @LastEditTime: 2020-11-24 17:22:09
+ * @LastEditTime: 2020-11-24 17:41:34
  * @FilePath: \nodeServer\doc\importExport.md
+ * 快捷键: vscode 中，可以使用 ctrl + shift + v 进行预览
 -->
 ***require: node 和 es6 都支持的引入***  
 ***export / import : 只有es6 支持的导出引入***  
