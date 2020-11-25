@@ -9,13 +9,14 @@ const logger = require('morgan');
 // const bodyParser = require('body-parser')
 
 //引入数据配置文件,即连接数据
-const mysql = require('./mysql/db'); // 连接数据库测试
 // const createdb = require('./mysql/createdb'); // 创建mysql数据库（只需一次）：nodeserverdb
+const mysql = require('./mysql/db'); // 连接数据库
 
 // 引入，mime类型，文件的后缀名
 const mime = require('./modle/utils/mime')
 
 // 引入route模块
+const mySqlRouter = require('./routes/createTable');
 const indexRouter = require('./routes/index');
 const uploadFileRouter = require('./routes/uploadFile'); // 上传文件练习
 const usersRouter = require('./routes/users');
@@ -64,8 +65,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter); //  项目启动，默认http://localhost:3000 访问views/index.html，测试路由配置成功
 
-
-app.use('/fileUpload', uploadFileRouter)
+app.use('/mySqlRouter', mySqlRouter);
+app.use('/fileUpload', uploadFileRouter);
 app.use('/users', usersRouter);
 
 
