@@ -2,7 +2,7 @@
  * @Descripttion: 
  * @Author: Irene.Z
  * @Date: 2020-11-25 15:24:21
- * @LastEditTime: 2020-11-25 16:08:27
+ * @LastEditTime: 2020-11-29 10:20:00
  * @FilePath: \nodeServer\mysql\modle\navigation.js
  */
 const createSql = "CREATE TABLE c_navigation_main("
@@ -18,7 +18,10 @@ const createSql = "CREATE TABLE c_navigation_main("
 
 const insertSql = "";
 
+const selectAll = "SELECT * FROM c_navigation_main"
+
 module.exports = {
   createSql,
-  insertSql
+  insertSql,
+  selectAll
 }

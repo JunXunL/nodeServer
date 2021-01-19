@@ -1,3 +1,10 @@
+<!--
+ * @Descripttion: 
+ * @Author: Irene.Z
+ * @Date: 2020-04-14 09:55:43
+ * @LastEditTime: 2020-12-15 01:29:03
+ * @FilePath: \nodeServer\README.md
+-->
 # 1、GitHub创建nodejs仓库，nodeserver
 # 2、本地拉取nodeserver
 # 3、初始化nodejs服务，在nodeserver下，打开命令行，输入：npm init
@@ -66,6 +73,11 @@
 ### 
 ### 
 ### 
-### 
-### 
-### 
+## node.js从req中取出参数 req.query & req.params & req.body
+### 在Express中获取request请求的参数，有3种方法：
+>方法1：req.query 属于node提供的原生方法
+>解释：从url中取出querystring
+>方法2：req.params 属于node提供的原生方法
+>解释：从RESTful风格的url中取出参数
+>方法3：req.body 需要body-parse中间件支持
+>解释：从post请求的body主体中取出参数 

@@ -6,7 +6,7 @@ const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 // const session = require("express-session");
-// const bodyParser = require('body-parser')
+const bodyParser = require('body-parser'); //加载body-parser，用来处理post提交过来的数据
 
 //引入数据配置文件,即连接数据
 // const createdb = require('./mysql/createdb'); // 创建mysql数据库（只需一次）：nodeserverdb
@@ -16,13 +16,18 @@ const mysql = require('./mysql/db'); // 连接数据库
 const mime = require('./modle/utils/mime')
 
 // 引入route模块
-const mySqlRouter = require('./routes/createTable');
+// const mySqlRouter = require('./routes/createTable');
 const indexRouter = require('./routes/index');
-const uploadFileRouter = require('./routes/uploadFile'); // 上传文件练习
-const usersRouter = require('./routes/users');
+// const uploadFileRouter = require('./routes/uploadFile'); // 上传文件练习
+// const usersRouter = require('./routes/users');
+const userRouter = require('./routes/common/user');
 
 
 const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));//这两个是和post请求有关系的
+app.use(express.urlencoded({ extended: false }));//这个是和get又关系的
 
 // 解决跨域请求
 app.all('*', function (req, res, next) {
@@ -65,9 +70,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter); //  项目启动，默认http://localhost:3000 访问views/index.html，测试路由配置成功
 
-app.use('/mySqlRouter', mySqlRouter);
-app.use('/fileUpload', uploadFileRouter);
-app.use('/users', usersRouter);
+// app.use('/mySqlRouter', mySqlRouter);
+// app.use('/fileUpload', uploadFileRouter);
+// app.use('/users', usersRouter);
+
+app.use('/user', userRouter);
 
 
 //配置session中间件
