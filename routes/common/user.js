@@ -2,7 +2,7 @@
  * @Descripttion: 操作用户表：注册，登录，完善用户详情，修改用户密码
  * @Author: Irene.Z
  * @Date: 2020-11-23 15:45:22
- * @LastEditTime: 2021-01-19 23:46:22
+ * @LastEditTime: 2021-01-21 17:56:05
  * @FilePath: \nodeServer\routes\common\user.js
  */
 
@@ -48,17 +48,27 @@ router.post('/add', (req, res) => {
   } else {
     const param = {
       name: reqBody.name,
-      password: reqBody.pass,
-      phone: '',
-      email: reqBody.email
+      password: reqBody.pass, // 确保字段名称与数据库内的名称相同
+      email: reqBody.email,
+      phone: reqBody.phone
     }
-    // 写入数据
-    mysql.query(userSql.insertSql, param, function (err, result) {
+    // 写入数据，方式一
+    // mysql.query(userSql.insertSql, Object.values(param), function (err, result) {
+    //   if (err) { // 操作失败报错
+    //     console.log('[SELECT ERROR]:', err.message);
+    //   }
+    //   if (result != undefined) {
+    //     res.json({status: "1", content: JSON.parse(JSON.stringify(result))})
+    //   }
+    // });
+    // 写入数据，方式二
+    mysql.query(userSql.insertSqlAll, param, function (err, result) {
       if (err) { // 操作失败报错
         console.log('[SELECT ERROR]:', err.message);
       }
       if (result != undefined) {
-        res.json({status: "1", content: JSON.parse(JSON.stringify(result))})
+        // JSON.parse(JSON.stringify(result))
+        res.json({status: "1", content: {message: 'SUCCESS'}})
       }
     });
     mysql.end();
