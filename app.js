@@ -10,7 +10,8 @@ const bodyParser = require('body-parser'); //加载body-parser，用来处理pos
 
 //引入数据配置文件,即连接数据
 // const createdb = require('./mysql/createdb'); // 创建mysql数据库（只需一次）：nodeserverdb
-const mysql = require('./mysql/db'); // 连接数据库
+// const mysql = require('./mysql/db'); // 连接数据库（方式：基本方式）
+// const pool = require('./mysql/createPool'); // 连接数据库（方式：连接池）写在各自封装的router.js中
 
 // 引入，mime类型，文件的后缀名
 const mime = require('./modle/utils/mime')

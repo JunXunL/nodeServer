@@ -2,7 +2,7 @@
  * @Descripttion: 
  * @Author: Irene.Z
  * @Date: 2020-04-14 09:55:43
- * @LastEditTime: 2020-12-15 01:29:03
+ * @LastEditTime: 2021-01-25 01:39:04
  * @FilePath: \nodeServer\README.md
 -->
 # 1、GitHub创建nodejs仓库，nodeserver
@@ -81,3 +81,9 @@
 >解释：从RESTful风格的url中取出参数
 >方法3：req.body 需要body-parse中间件支持
 >解释：从post请求的body主体中取出参数 
+
+# Cannot enqueue Query after invoking quit
+## PROTOCOL_ENQUEUE_AFTER_QUIT 、 protocal enqueue after out
+## 中文意思是调用quit后无法查询队列
+>但是项目里并没有quit
+>当第一次执行数据库操作时，是可以成功的。这时第二次执行数据库操作，就会报错如标题所示。这是因为我们在使用.end()方法关掉连接之后，需要重新调用 createConnection重新创建一个连接。

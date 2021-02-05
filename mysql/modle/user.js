@@ -2,7 +2,7 @@
  * @Descripttion: 
  * @Author: Irene.Z
  * @Date: 2020-11-24 10:24:41
- * @LastEditTime: 2021-01-20 17:43:47
+ * @LastEditTime: 2021-02-04 16:09:39
  * @FilePath: \nodeServer\mysql\modle\user.js
  */
 
@@ -17,6 +17,39 @@ const userSql = {
   updatedSql: (obj) => {
     return "UPDATE u_user_main set name='" + obj.name + "' and password='" + obj.password+ "' and phone='"+ obj.phone +"' and email='"+ obj.email +"' where id='" + obj.id + "'";
   }
+}
+
+
+let UserObj = {};
+UserObj.getCount = function(pool) {
+  return new Promise(function (resolve, reject) {
+    pool.getConnection(function(err, connection) {
+      connection.query('select count(*) as count from u_user_main',function (error, results, fields) {
+        if (error) {
+          reject(error)
+        } else {
+          resolve(results)
+        };
+        console.log('The u_user_main results:',results);
+        connection.release();
+      })
+    })
+  })
+}
+
+UserObj.add = function(pool, param) {
+  return new Promise(function (resolve, reject) {
+    pool.getConnection(function(err, connection) {
+      connection.query(userSql.insertSqlAll, param, function (error, result) {
+        if (error) {
+          reject(error)
+        } else {
+          resolve(result)
+        }
+        connection.release();
+      });
+    })
+  })
 }
 
 // 插入语句
@@ -46,4 +79,4 @@ const userSql = {
 
 // (1)错误导出方式： module.exports.UserSql; // const UserSql = require('../mysql/modle/user'); // UserSql对象是：{}
 // (2)不合理导出方式： module.exports.UserSql = UserSql; // // const UserSql = require('../mysql/modle/user'); // UserSql对象是：{UserSql:{...}}
-module.exports = userSql; // 输出userSql对象
+module.exports = UserObj; // 输出userSql对象
