@@ -3,7 +3,8 @@ const path = require('path');
 const fs = require("fs");
 const url = require("url");
 const createError = require('http-errors');
-const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser'); // session的认证机制必须依赖cookie，同时安装cookie-parser，然后再app.js中导入这两个中间件
+const session = require('express-session'); // session的认证机制必须依赖cookie，同时安装cookie-parser，然后再app.js中导入这两个中间件
 const logger = require('morgan');
 // const session = require("express-session");
 const bodyParser = require('body-parser'); //加载body-parser，用来处理post提交过来的数据
@@ -23,12 +24,26 @@ const indexRouter = require('./routes/index');
 // const usersRouter = require('./routes/users');
 const userRouter = require('./routes/common/user');
 
+const svgRouter = require('./routes/common/svgCaptcha'); // svg-captcha验证码，使用方法
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));//这两个是和post请求有关系的
-app.use(express.urlencoded({ extended: false }));//这个是和get又关系的
+app.use(express.urlencoded({ extended: false }));//这个是和get有关系的
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser()); // 定义cookie解析器，注意，该定义必须写在路由分配之前！！！
+// 配置session中间件
+app.use(session({
+  secret: '12345',
+  name: 'name',
+  cookie: {maxAge: 1000*60},
+  resave: false,
+  saveUninitialized: true,
+}));
 
 // 解决跨域请求
 app.all('*', function (req, res, next) {
@@ -60,10 +75,6 @@ app.engine('.html', require('ejs').renderFile); // 等同于：app.engine('.html
 // app.set('views', path.join(__dirname, 'views/'));
 app.set('view engine', 'html'); // -3.设置视图引擎，为html
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 //将静态文件目录设置为：项目根目录+/public
 // app.use(express.static(__dirname + '/public'));
 //或者
@@ -77,15 +88,7 @@ app.use('/', indexRouter); //  项目启动，默认http://localhost:3000 访问
 
 app.use('/user', userRouter);
 
-
-//配置session中间件
-// app.use(session({
-//   secret:"keyboard cat",
-//   resave:false,
-//   saveUninitialized:true,
-//   cookie:{maxAge:1000*60*30},
-//   rolling:true
-// }));
+app.use('/svg', svgRouter); // 进行测试发现没有返回值，排查错误后发现是没有注册session中间件，svg-captcha依赖session存储验证码信息！！！
 
 // 使用bodyParser解析以下格式
 // app.use(bodyParser.urlencoded({ extended: false }))// parse application/x-www-form-urlencoded , 表单格式 , 解析POST请求方式中返回的req.body
