@@ -2,7 +2,7 @@
  * @Descripttion: 操作用户表：注册，登录，完善用户详情，修改用户密码
  * @Author: Irene.Z
  * @Date: 2020-11-23 15:45:22
- * @LastEditTime: 2021-02-14 01:07:21
+ * @LastEditTime: 2021-02-16 03:42:16
  * @FilePath: \nodeServer\routes\common\user.js
  * 【requestId: new Date() 关联日志，未完成】
  */
@@ -12,7 +12,8 @@ const router = express.Router();
 // const bodyParser = require('body-parser');
 // const urlencoded = bodyParser.urlencoded({extended: false});
 
-const Empty = require('../../public/javascripts/isEmpty')
+const Empty = require('../../public/javascripts/isEmpty');
+const _CryptoJS = require('../../public/javascripts/cryptoJS');
 
 // const mysql = require('./../../mysql/db');
 //通过连接池连接数据库，这里创建连接池返回连接池对象 -- 【开始】
@@ -23,9 +24,10 @@ const UserObj = require('./../../mysql/modle/user'); // 实体类
 // const addSqlParams = ['菜鸟', 18, 'https://c.xxrunoob.com']; // 这是想增加的数据
 
 router.post('/get', (req, res) => {
-  const reqBody = req.body;
-  console.log("/get:  ", reqBody);
-  if (Empty.isEmpty(reqBody)) {
+  const {body, session} = req;
+  const {account, pass, security} = body;
+  console.log("body---------", body);
+  if (Empty.isEmpty(body)) {
     req.json({
       code: "1",
       message: "error",
@@ -34,14 +36,50 @@ router.post('/get', (req, res) => {
       content: "服务器未获取到数据"
     })
   } else {
-    // const pass = reqBody.pass;
-    const param = [reqBody.account, reqBody.account]; // sql的query语句含有多个占位符?，使用数组
-    console.log("get param:", param)
-    UserObj.getUserByAccount(pool, param).then((result) => {
-      console.log("get:", result)
-    }).catch((error) => {
-      console.log("get", error)
-    })
+    if(session.captcha.toLowerCase() != security.toLowerCase()){
+      req.json({
+        code: "0",
+        message: "false",
+        requestId: new Date(),
+        success: true,
+        content: "验证码不正确"
+      });
+    }else{
+      // const pass = reqBody.pass;
+      const param = [account, account]; // sql的query语句含有多个占位符?，使用数组
+      UserObj.getUserByAccount(pool, param).then((result) => {
+        console.log("get:", result)
+        if (result.length > 0) {
+          if (result[0].password != _CryptoJS.decrypt(pass.toString())) {
+            res.json({
+              code: "0",
+              message: "false",
+              requestId: new Date(),
+              success: true,
+              content: "密码不正确"
+            })
+          } else {
+            res.json({
+              code: "0",
+              message: "success",
+              requestId: new Date(),
+              success: true,
+              content: null
+            })
+          }
+        } else {
+          res.json({
+            code: "0",
+            message: "false",
+            requestId: new Date(),
+            success: true,
+            content: "账号不存在"
+          })
+        }
+      }).catch((error) => {
+        console.log("get", error)
+      })
+    }
   }
   let data = {}
   // mysql.query(UserObj.selectAll, (err, result) => {
