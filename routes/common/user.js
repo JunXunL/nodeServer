@@ -2,7 +2,7 @@
  * @Descripttion: 操作用户表：注册，登录，完善用户详情，修改用户密码
  * @Author: Irene.Z
  * @Date: 2020-11-23 15:45:22
- * @LastEditTime: 2021-02-16 03:42:16
+ * @LastEditTime: 2021-02-17 19:45:14
  * @FilePath: \nodeServer\routes\common\user.js
  * 【requestId: new Date() 关联日志，未完成】
  */
@@ -29,7 +29,7 @@ router.post('/get', (req, res) => {
   console.log("body---------", body);
   if (Empty.isEmpty(body)) {
     req.json({
-      code: "1",
+      code: "2",
       message: "error",
       requestId: new Date(),
       success: false,
@@ -38,7 +38,7 @@ router.post('/get', (req, res) => {
   } else {
     if(session.captcha.toLowerCase() != security.toLowerCase()){
       req.json({
-        code: "0",
+        code: "1",
         message: "false",
         requestId: new Date(),
         success: true,
@@ -52,7 +52,7 @@ router.post('/get', (req, res) => {
         if (result.length > 0) {
           if (result[0].password != _CryptoJS.decrypt(pass.toString())) {
             res.json({
-              code: "0",
+              code: "1",
               message: "false",
               requestId: new Date(),
               success: true,
@@ -69,7 +69,7 @@ router.post('/get', (req, res) => {
           }
         } else {
           res.json({
-            code: "0",
+            code: "1",
             message: "false",
             requestId: new Date(),
             success: true,
@@ -81,7 +81,7 @@ router.post('/get', (req, res) => {
       })
     }
   }
-  let data = {}
+  // let data = {}
   // mysql.query(UserObj.selectAll, (err, result) => {
   //   if(err){
   //     res.json({
@@ -111,7 +111,7 @@ router.post('/add', (req, res) => {
   const reqBody = req.body;
   if (Empty.isEmpty(reqBody)) {
     res.json({
-      code: "1",
+      code: "2",
       message: "error",
       requestId: new Date(),
       success: false,
@@ -161,7 +161,7 @@ router.post('/add', (req, res) => {
       })
     }).catch(function (err) {
       res.json({
-        code: "1",
+        code: "2",
         message: "error",
         requestId: new Date(),
         success: false,
