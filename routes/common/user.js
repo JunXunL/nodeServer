@@ -2,7 +2,7 @@
  * @Descripttion: 操作用户表：注册，登录，完善用户详情，修改用户密码
  * @Author: Irene.Z
  * @Date: 2020-11-23 15:45:22
- * @LastEditTime: 2021-02-17 19:45:14
+ * @LastEditTime: 2021-02-22 16:40:56
  * @FilePath: \nodeServer\routes\common\user.js
  * 【requestId: new Date() 关联日志，未完成】
  */
@@ -13,7 +13,8 @@ const router = express.Router();
 // const urlencoded = bodyParser.urlencoded({extended: false});
 
 const Empty = require('../../public/javascripts/isEmpty');
-const _CryptoJS = require('../../public/javascripts/cryptoJS');
+
+const _CryptoJS = require('../../public/javascripts/cryptoJS'); // password加密解密，第三方插件
 
 // const mysql = require('./../../mysql/db');
 //通过连接池连接数据库，这里创建连接池返回连接池对象 -- 【开始】
@@ -21,14 +22,16 @@ const pool = require('./../../mysql/createPool'); // 连接数据库（方式：
 //通过连接池连接数据库，这里创建连接池返回连接池对象 -- 【结束】
 const UserObj = require('./../../mysql/modle/user'); // 实体类
 
-// const addSqlParams = ['菜鸟', 18, 'https://c.xxrunoob.com']; // 这是想增加的数据
+// jwt生成token
+const jwt = require("jsonwebtoken"); // node生成token，第三方插件
+const { PRIVITE_KEY, EXPIRESD } = require("../../public/javascripts/jwt-secret");
 
 router.post('/get', (req, res) => {
   const {body, session} = req;
   const {account, pass, security} = body;
   console.log("body---------", body);
   if (Empty.isEmpty(body)) {
-    req.json({
+    res.json({
       code: "2",
       message: "error",
       requestId: new Date(),
@@ -36,21 +39,25 @@ router.post('/get', (req, res) => {
       content: "服务器未获取到数据"
     })
   } else {
+    // 后端session中保存的验证码  ！=  前端传回的验证码
     if(session.captcha.toLowerCase() != security.toLowerCase()){
-      req.json({
+      res.json({
         code: "1",
         message: "false",
         requestId: new Date(),
         success: true,
         content: "验证码不正确"
       });
+      console.log("security:", result)
     }else{
       // const pass = reqBody.pass;
       const param = [account, account]; // sql的query语句含有多个占位符?，使用数组
       UserObj.getUserByAccount(pool, param).then((result) => {
         console.log("get:", result)
         if (result.length > 0) {
+          console.log("get-----------  1")
           if (result[0].password != _CryptoJS.decrypt(pass.toString())) {
+            console.log("get-----------  2")
             res.json({
               code: "1",
               message: "false",
@@ -59,15 +66,19 @@ router.post('/get', (req, res) => {
               content: "密码不正确"
             })
           } else {
+            console.log("get-----------  3")
+            //jwt.sign()方法可生成token，第一个参数写的用户信息进去（可以写其他的），第二个是秘钥，第三个是过期时间
+            let token = jwt.sign({ account }, PRIVITE_KEY, { expiresIn: EXPIRESD }); // 生成token
             res.json({
               code: "0",
               message: "success",
               requestId: new Date(),
               success: true,
-              content: null
+              content: { token }
             })
           }
         } else {
+          console.log("get-----------  4")
           res.json({
             code: "1",
             message: "false",
@@ -77,7 +88,15 @@ router.post('/get', (req, res) => {
           })
         }
       }).catch((error) => {
+        console.log("get-----------  5")
         console.log("get", error)
+        res.json({
+          code: "2",
+          message: "error",
+          requestId: new Date(),
+          success: false,
+          content: "保存用户信息失败"
+        })
       })
     }
   }

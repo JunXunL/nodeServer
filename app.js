@@ -8,6 +8,8 @@ const session = require('express-session'); // session的认证机制必须依�
 const logger = require('morgan');
 // const session = require("express-session");
 const bodyParser = require('body-parser'); //加载body-parser，用来处理post提交过来的数据
+const jwt = require('jsonwebtoken');
+const { PRIVITE_KEY } = require('./public/javascripts/jwt-secret');
 
 //引入数据配置文件,即连接数据
 // const createdb = require('./mysql/createdb'); // 创建mysql数据库（只需一次）：nodeserverdb
@@ -25,8 +27,20 @@ const indexRouter = require('./routes/index');
 const userRouter = require('./routes/common/user');
 
 const svgRouter = require('./routes/common/svgCaptcha'); // svg-captcha验证码，使用方法
+const jwtSecret = require('./public/javascripts/jwt-secret');
 
 const app = express();
+// 加载静态资源
+app.set('views', path.join(__dirname, 'views'));
+// var ejs = require('ejs');  // -1.新引入的ejs插件
+app.engine('.html', require('ejs').renderFile); // 等同于：app.engine('.html', require('ejs').__express); // -2.设置html引擎
+// app.set('views', path.join(__dirname, 'views/'));
+app.set('view engine', 'html'); // -3.设置视图引擎，为html
+
+//将静态文件目录设置为：项目根目录+/public
+// app.use(express.static(__dirname + '/public'));
+//或者
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));//这两个是和post请求有关系的
@@ -45,9 +59,9 @@ app.use(session({
   saveUninitialized: true,
 }));
 
-// 解决跨域请求
+// 使用中间件拦截接口
 app.all('*', function (req, res, next) {
-  console.log("---------------app.all------------------")
+  // 解决跨域请求
   // 设置请求头
   res.header('Access-Control-Allow-Origin', '*');  //设置允许跨域的域名，* 代表允许任意域名跨域，允许所有来源访问
   res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With');//允许的header类型
@@ -55,6 +69,7 @@ app.all('*', function (req, res, next) {
   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS'); // 跨域允许的请求方式
   // res.header('X-Powered-By', ' 3.2.1') // 修改程序信息与版本
   // res.header('Content-Type', 'application/json;charset=utf-8') // 内容类型：如果是post请求必须指定这个属性
+
   if (req.method == 'OPTIONS') {
     /**
      * 常用的返回方式有四种
@@ -69,16 +84,20 @@ app.all('*', function (req, res, next) {
   }
 });
 
-app.set('views', path.join(__dirname, 'views'));
-// var ejs = require('ejs');  // -1.新引入的ejs插件
-app.engine('.html', require('ejs').renderFile); // 等同于：app.engine('.html', require('ejs').__express); // -2.设置html引擎
-// app.set('views', path.join(__dirname, 'views/'));
-app.set('view engine', 'html'); // -3.设置视图引擎，为html
-
-//将静态文件目录设置为：项目根目录+/public
-// app.use(express.static(__dirname + '/public'));
-//或者
-app.use(express.static(path.join(__dirname, 'public')));
+app.all('*', function (req, res, next) {
+  //使用此方法拦截所有请求看token是否正确（此方法写在静态资源加载之后，不然静态资源不能访问）
+  const token = req.headers.token;
+  jwt.verify(token, PRIVITE_KEY, (err, data) => {
+    console.log('jwt data: ', data);
+    // 需要登录的接口都验证token的有效性
+    if(err && (req.path != '/svg')) {
+      console.log(err.message); // 验证不通过
+      res.send({code: 1, message: 'token无效'})
+    } else {
+      next()
+    }
+  })
+});
 
 app.use('/', indexRouter); //  项目启动，默认http://localhost:3000 访问views/index.html，测试路由配置成功
 
