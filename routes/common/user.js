@@ -28,7 +28,7 @@ const { PRIVITE_KEY, EXPIRESD } = require("../../public/javascripts/jwt-secret")
 
 router.post('/get', (req, res) => {
   const {body, session} = req;
-  const {account, pass, security} = body;
+  const {account, pass, email, security} = body;
   console.log("body---------", body);
   if (Empty.isEmpty(body)) {
     res.json({
@@ -50,14 +50,12 @@ router.post('/get', (req, res) => {
       });
       console.log("security:", result)
     }else{
-      // const pass = reqBody.pass;
-      const param = [account, account]; // sql的query语句含有多个占位符?，使用数组
+      const param = [account, email]; // sql的query语句含有多个占位符?，使用数组
       UserObj.getUserByAccount(pool, param).then((result) => {
         console.log("get:", result)
         if (result.length > 0) {
-          console.log("get-----------  1")
-          if (result[0].password != _CryptoJS.decrypt(pass.toString())) {
-            console.log("get-----------  2")
+          let userTB = JSON.parse(JSON.stringify(result));
+          if (userTB[0].password != _CryptoJS.decrypt(pass.toString())) {
             res.json({
               code: "1",
               message: "false",
@@ -67,6 +65,7 @@ router.post('/get', (req, res) => {
             })
           } else {
             console.log("get-----------  3")
+            // 在客户端发起登录请求时，将token发送回给客户端，让它每次再发起请求时都携带token。
             //jwt.sign()方法可生成token，第一个参数写的用户信息进去（可以写其他的），第二个是秘钥，第三个是过期时间
             let token = jwt.sign({ account }, PRIVITE_KEY, { expiresIn: EXPIRESD }); // 生成token
             res.json({
@@ -128,6 +127,7 @@ router.post('/get', (req, res) => {
 router.post('/add', (req, res) => {
   // req.body 或 req.params
   const reqBody = req.body;
+  console.log("用户注册信息：", reqBody);
   if (Empty.isEmpty(reqBody)) {
     res.json({
       code: "2",
@@ -171,6 +171,7 @@ router.post('/add', (req, res) => {
     // mysql.end();
 
     UserObj.add(pool, param).then(function (result) {
+      console.log('添加用户信息，成功：', result);
       res.json({
         code: "0",
         message: "success",
@@ -179,6 +180,7 @@ router.post('/add', (req, res) => {
         content: null
       })
     }).catch(function (err) {
+      console.log('添加用户信息，失败：', err);
       res.json({
         code: "2",
         message: "error",

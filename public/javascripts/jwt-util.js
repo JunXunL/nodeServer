@@ -10,6 +10,9 @@ const { PRIVITE_KEY, EXPIRESD} = require('./jwt-secret');
 
 //生成jwt
 export function createToken(param) {
+  // {username}    用于作为token的数据部分，可以是其它任意数据
+	// PRIVATE_KEY   密钥，自定义字符串
+	// {expiresIn:JWT_EXPIRED}   过期时间
   const token = jwt.sign({ param }, PRIVITE_KEY, { EXPIRESD });
   return token;
 }

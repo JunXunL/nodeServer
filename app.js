@@ -90,8 +90,8 @@ app.all('*', function (req, res, next) {
   jwt.verify(token, PRIVITE_KEY, (err, data) => {
     console.log('jwt data: ', data);
     // 需要登录的接口都验证token的有效性
-    if(err && (req.path != '/svg')) {
-      console.log(err.message); // 验证不通过
+    if(err && (req.path != '/svg') && (req.path != "/user/get") && (req.path != "/user/add")) {
+      console.log('token错误信息：', err.message); // 验证不通过
       res.send({code: 1, message: 'token无效'})
     } else {
       next()
