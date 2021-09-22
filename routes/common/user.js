@@ -2,7 +2,7 @@
  * @Descripttion: 操作用户表：注册，登录，完善用户详情，修改用户密码
  * @Author: Irene.Z
  * @Date: 2020-11-23 15:45:22
- * @LastEditTime: 2021-02-22 16:40:56
+ * @LastEditTime: 2021-09-21 22:43:01
  * @FilePath: \nodeServer\routes\common\user.js
  * 【requestId: new Date() 关联日志，未完成】
  */
@@ -28,8 +28,8 @@ const { PRIVITE_KEY, EXPIRESD } = require("../../public/javascripts/jwt-secret")
 
 router.post('/get', (req, res) => {
   const {body, session} = req;
-  const {account, pass, email, security} = body;
-  console.log("body---------", body);
+  const {account, password, email, security} = body;
+  console.log("user get info: ", body);
   if (Empty.isEmpty(body)) {
     res.json({
       code: "2",
@@ -48,14 +48,14 @@ router.post('/get', (req, res) => {
         success: true,
         content: "验证码不正确"
       });
-      console.log("security:", result)
     }else{
       const param = [account, email]; // sql的query语句含有多个占位符?，使用数组
       UserObj.getUserByAccount(pool, param).then((result) => {
-        console.log("get:", result)
+        console.log("get user info: ", result);
         if (result.length > 0) {
           let userTB = JSON.parse(JSON.stringify(result));
-          if (userTB[0].password != _CryptoJS.decrypt(pass.toString())) {
+          // password 解密匹配
+          if (userTB[0].password != _CryptoJS.decrypt(password.toString())) {
             res.json({
               code: "1",
               message: "false",
@@ -64,7 +64,6 @@ router.post('/get', (req, res) => {
               content: "密码不正确"
             })
           } else {
-            console.log("get-----------  3")
             // 在客户端发起登录请求时，将token发送回给客户端，让它每次再发起请求时都携带token。
             //jwt.sign()方法可生成token，第一个参数写的用户信息进去（可以写其他的），第二个是秘钥，第三个是过期时间
             let token = jwt.sign({ account }, PRIVITE_KEY, { expiresIn: EXPIRESD }); // 生成token
@@ -73,11 +72,10 @@ router.post('/get', (req, res) => {
               message: "success",
               requestId: new Date(),
               success: true,
-              content: { token }
+              content: { token, userInfo: userTB[0] }
             })
           }
         } else {
-          console.log("get-----------  4")
           res.json({
             code: "1",
             message: "false",
@@ -87,14 +85,12 @@ router.post('/get', (req, res) => {
           })
         }
       }).catch((error) => {
-        console.log("get-----------  5")
-        console.log("get", error)
         res.json({
           code: "2",
           message: "error",
           requestId: new Date(),
           success: false,
-          content: "保存用户信息失败"
+          content: "获取用户信息失败，服务器异常。"
         })
       })
     }
@@ -127,7 +123,7 @@ router.post('/get', (req, res) => {
 router.post('/add', (req, res) => {
   // req.body 或 req.params
   const reqBody = req.body;
-  console.log("用户注册信息：", reqBody);
+  console.log("user register info: ", reqBody);
   if (Empty.isEmpty(reqBody)) {
     res.json({
       code: "2",
